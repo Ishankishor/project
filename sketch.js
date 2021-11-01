@@ -1,110 +1,83 @@
-var bg,sleep, brush, gym, eat, bath, move;
-var astronaut;
 
-function preload(){
-  bg= loadImage("images/iss.png");
-  sleep = loadAnimation("images/sleep.png");
-  brush = loadAnimation("images/brush.png");
-  gym = loadAnimation("images/gym1.png","images/gym1.png","images/gym2.png","images/gym2.png");
-  eat = loadAnimation("images/eat1.png","images/eat1.png","images/eat1.png","images/eat2.png","images/eat2.png","images/eat2.png");
-  bath = loadAnimation("images/bath1.png","images/bath1.png","images/bath1.png","images/bath2.png","images/bath2.png","images/bath2.png");
- move = loadAnimation("images/move1.png","images/move1.png","images/move2.png","images/move2.png");
-}
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 
+let engine;
+let world;
+var angle=60;
+
+var ground;
+var b1,b2,b3,b4;
+var top_wall;
+var ball,rock;
+
+var btn1;
+var btn2;
 function setup() {
-  createCanvas(600, 500);
+  createCanvas(400,400);
+
+  engine = Engine.create();
+  world = engine.world;
   
-  astronaut = createSprite(300,230);
-  astronaut.addAnimation("sleeping", sleep);
-  astronaut.scale = 0.1;
+   
+  var ground_options ={
+    isStatic: true
+  };
+ 
+  var ball_options = {
+    //write a code to set value of restitution such that:
+//Ball (white circle) bounces more when it hits the bottom.
+
+  }
+
+  var rock_options = {
+   // write a code to set value of restitution such that:
+   // Rock (Red Circle) bounces less when it hits the bottom.
+  }
+   
+  btn2 = createImg('up.png');
+  btn2.position(350,30);
+  btn2.size(50,50);
+  btn2.mouseClicked(vForce);
   
+  ball = Bodies.circle(100,10,20,ball_options);
+  World.add(world,ball);
+  
+  rock = Bodies.circle(250,10,20,rock_options);
+  World.add(world,rock);
+
+  ground= Bodies.rectangle(200,390,400,20,ground_options);
+
+  World.add(world, ground);
+ 
+  
+
+  rectMode(CENTER);
+  ellipseMode(RADIUS);
 }
 
-function draw() {
-  background(bg);
-  drawSprites();
 
-  textSize(20);
-  fill("white")
-  text("Instructions:",20, 35);
-  textSize(15);
-  text("Up Arrow = Brushing",20, 55);
-  text("Down Arrow = Gymming",20, 70);
-  text("Left Arrow = Eating",20, 85);
-  text("Right Arrow = Bathing",20, 100);
-  text("m key = Moving",20, 115);
+function draw() 
+{
+  background(51);
+  Engine.update(engine);
   
-  /*edges=createEdgeSprites();
-  astronautbounce.Off(edges);*/
-
-  /*edges=createEdgeSprites();
-  astronaut.BounceOff(edges);*/
-
-  edges=createEdgeSprites();
-  astronaut.bounceOff(edges);
-
-  /*edges=createEdgeSprite();
-  astronaut.bounceOff(edges);*/
-  
-  if(keyDown("UP_ARROW")){
-    astronaut.addAnimation("brushing", brush);
-    astronaut.changeAnimation("brushing");
-    astronaut.y = 350;
-    astronaut.velocityX = 0;
-    astronaut.velocityY = 0;
-  }
-  
-  if(keyDown("DOWN_ARROW")){
-    astronaut.addAnimation("gymming", gym);
-    astronaut.changeAnimation("gymming");
-    astronaut.y = 350;
-    astronaut.velocityX = 0;
-    astronaut.velocityY = 0;
-  }
-  
-  if(keyDown("LEFT_ARROW")){
-    astronaut.addAnimation("eating", eat);
-    astronaut.changeAnimation("eating");
-    astronaut.x = 150;
-    astronaut.y = 350;
-    astronaut.velocityX = 0.5;
-    astronaut.velocityY = 0.5;
-  }
-  
-  if(keyDown("RIGHT_ARROW")){
-    astronaut.addAnimation("bathing", bath);
-    astronaut.changeAnimation("bathing");
-    astronaut.x = 300;
-    astronaut.velocityX = 0;
-    astronaut.velocityY = 0;
-  }
-
-  /*if(key Down("m")){
-    astronaut.addAnimation("moving", move);
-    astronaut.changeAnimation("moving");
-    astronaut.velocityX = 1;
-    astronaut.velocityY = 1;
-  }*/
-
-  /*if(keyDown("m")){
-    astronaut.addAnimation("moving", move);
-    astronaut.changeAnimation("moving");
-    astronaut.velocityX = 0;
-    astronaut.velocityY = 0;
-  }*/
-
-  if(keyDown("m")){
-    astronaut.changeAnimation("moving", move);
-    astronaut.changeAnimation("moving");
-    astronaut.velocityX = 1;
-    astronaut.velocityY = 1;
-  }
-
-  /*if(keyDown("m")){
-    astronaut.addAnimation("moving", move);
-    astronaut.changeAnimation("moving");
-    astronaut.velocityX = 1;
-    astronaut.velocityY = 1;
-  }*/
-
+rect(ground.position.x,ground.position.y,400,20);
+ellipse(ball.position.x,ball.position.y,20);
+push();
+fill("brown");
+ellipse(rock.position.x,rock.position.y,20);
+pop();
 }
+
+function vForce()
+{
+ //write a code to move ball up when the button is clicked.
+}
+
+
+  
+
+
